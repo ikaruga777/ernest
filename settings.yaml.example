@@ -1,0 +1,6 @@
+slack:
+  token: 'xoxp-XXXXXXX'
+github:
+  api_endpoint: 'https://<your.github.enterprise>/api/v3/'
+  access_token: 'XXXXXXX'
+  save_gist_id: 'XXXXXXX'

@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+retried = false
+begin
+  require 'ernest'
+rescue LoadError
+  raise if retried
+
+  retried = true
+  $LOAD_PATH.unshift "#{__dir__}/../lib"
+  retry
+end
+
+Ernest.new.run
