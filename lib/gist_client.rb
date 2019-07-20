@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'octokit'
 class GistClient
   def initialize(api_endpoint, token, gist_id)
@@ -9,21 +11,16 @@ class GistClient
   def save(file, content)
     if @gist_id
       client.edit_gist(@gist_id,
-        {
-          "files": {
-            file => {
-              content: content
-            }
-          }
-        }
-      )
+                       "files": {
+                         file => {
+                           content: content
+                         }
+                       })
     else
       gist = client.create_gist(
-        {
-          "files": {
-            file => {
-              content: content
-            }
+        "files": {
+          file => {
+            content: content
           }
         }
       )
@@ -35,9 +32,8 @@ class GistClient
   def fetch_last_content(file)
     gist = client.gist(@gist_id)
     last_commit_url = gist['history'].first['url']
-    response = Net::HTTP.get(URI.parse last_commit_url)
+    response = Net::HTTP.get(URI.parse(last_commit_url))
     JSON.parse(response)['files'][file]['content']
-
   end
 
   private
