@@ -10,8 +10,8 @@ class SlackClient
     Net::HTTP.get(URI.parse("https://slack.com/api/emoji.list?token=#{@api_token}&pretty=1"))
   end
 
-  def notify(content, as_user = false)
-    client.chat_postMessage(channel: '#feed', text: content, as_user: as_user)
+  def notify(channel, content, as_user = false)
+    client.chat_postMessage(channel: channel, text: content, as_user: as_user)
   end
 
   private

@@ -20,9 +20,10 @@ class Ernest
 
     emoji_json = EmojiJson.new(JSON.parse(last_emoji_dump), JSON.parse(emoji_dump))
     content = emoji_json.diff
+    puts settings['slack']['notify_channel']
 
-    slack_client.notify(content)
+    slack_client.notify(settings['slack']['notify_channel'], content)
 
-    gist_client.save('emoji_list.json', emoji_dump)
+    gist_client.save(settings['github']['gist_save_file'], emoji_dump)
   end
 end
