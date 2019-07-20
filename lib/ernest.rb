@@ -1,47 +1,23 @@
 require 'net/http'
 require 'uri'
 require 'date'
-require 'octokit'
 require 'yaml'
+require 'slack_client'
+require 'gist_client'
 
 class Ernest
   def run
     settings = YAML.load_file('settings.yaml')
-    puts settings['github']
-    if settings['github']['api_endpoint']
-      Octokit.configure do |c|
-        c.api_endpoint = settings['github']['api_endpoint']
-      end
-    end
-    slack_token = settings['slack']['token']
-    json = Net::HTTP.get(URI.parse "https://slack.com/api/emoji.list?token=#{slack_token}&pretty=1")
 
-  if false
-    ghe_token = settings['github']['ghe_token']
-    gist_id = settings['github']['gist_id']
+    slack_client = SlackClient.new(settings['slack']['token'])
+    dump = slack_client.dump_emoji_list
 
-    client = Octokit::Client.new access_token: ghe_token
+    gist_client = Gist.new(settings['github']['api_endpoint'], settings['github']['access_token'], settings['github']['save_gist_id'])
+    last_dump = gist_client.fetch_last
 
-    save_gist_id = settings['github']['gist_id']
-    if
-      client.edit_gist(save_gist_id, { "files": {"emoji.json": { content: json }}})
-    else
-      client.create_gist({ "files": {"emoji.json": { content: json }}})
-    end
-  end
-    date = Date.parse(Time.now.to_s)
-    File.open("#{date.to_s}.json", "w", 0755) do |f|
-      f.print json
-    end
-  end
+    JSON.parse(last_dump)['files']['emoji_list.json']['content']
 
-  def format(prev_json,current_json)
-    prev_set = Set.new prev["emoji"].keys
-    current_set = Set.new current["emoji"].keys
-    puts "prev count#{prev_set.count}"
-    puts "current count #{current_set.count}"
-    diff = current_set - prev_set
-    puts "diff count #{diff.count}"
-    puts ":"+diff.to_a.join(': :')+":"
+    content = dump
+    gist_client.save("emoji_list.json", content)
   end
 end
