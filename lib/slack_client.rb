@@ -5,7 +5,7 @@ class SlackClient
   end
 
   def dump_emoji_list
-    response = Net::HTTP.get(URI.parse "https://slack.com/api/emoji.list?token=#{@api_token}&pretty=1")
+    Net::HTTP.get(URI.parse "https://slack.com/api/emoji.list?token=#{@api_token}&pretty=1")
   end
 
   def notify(content, as_user = false)
