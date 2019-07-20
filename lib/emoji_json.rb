@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 class EmojiJson
   def initialize(prev_json, current_json)
