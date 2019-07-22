@@ -12,4 +12,7 @@ rescue LoadError
   retry
 end
 
+ENV['ENV'] ||= 'development'
+Bundler.require(:default, ENV['ENV'])
+
 Ernest.new.run
