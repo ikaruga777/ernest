@@ -16,14 +16,17 @@ class Ernest
     gist_client = GistClient.new(settings['github']['api_endpoint'], settings['github']['access_token'], settings['github']['save_gist_id'])
 
     emoji_dump = slack_client.dump_emoji_list
-    last_emoji_dump = gist_client.fetch_last_content 'emoji_list.json'
+    last_emoji_dump = gist_client.fetch_last_content(settings['github']['save_gist_file'])
 
-    emoji_json = EmojiJson.new(JSON.parse(last_emoji_dump), JSON.parse(emoji_dump))
-    content = emoji_json.diff
-    puts settings['slack']['notify_channel']
+    if last_emoji_dump
 
-    slack_client.notify(settings['slack']['notify_channel'], content)
+      emoji_json = EmojiJson.new(JSON.parse(last_emoji_dump), JSON.parse(emoji_dump))
+      content = emoji_json.diff
+      puts settings['slack']['notify_channel']
 
-    gist_client.save(settings['github']['gist_save_file'], emoji_dump)
+      slack_client.notify(settings['slack']['notify_channel'], content)
+    end
+
+    gist_client.save(settings['github']['save_gist_file'], emoji_dump)
   end
 end
