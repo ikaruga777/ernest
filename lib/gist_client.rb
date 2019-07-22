@@ -31,9 +31,12 @@ class GistClient
 
   def fetch_last_content(file)
     gist = client.gist(@gist_id)
-    last_commit_url = gist['history'].first['url']
-    response = Net::HTTP.get(URI.parse(last_commit_url))
-    JSON.parse(response)['files'][file]['content']
+    last_commit_sha = gist['history'].first['version']
+    last_commit = client.gist(@gist_id, sha: last_commit_sha)
+
+    return nil if last_commit['files'][file].nil?
+
+    last_commit['files'][file]['content']
   end
 
   private
