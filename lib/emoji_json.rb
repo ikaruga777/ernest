@@ -1,4 +1,4 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 class EmojiJson
   def initialize(prev_json, current_json)
@@ -17,9 +17,9 @@ class EmojiJson
 
   def format(prev_emojis, current_emojis, diff)
     content = "prev count#{prev_emojis.count}\n"
-    content << "current count #{current_emojis.count}\n"
-    content << "diff count #{diff.count}\n"
-    content << ':' + diff.to_a.join(': :') + ':' if diff.count > 0
+    content += "current count #{current_emojis.count}\n"
+    content += "diff count #{diff.count}\n"
+    content += ':' + diff.to_a.join(': :') + ':' if diff.count > 0
     content
   end
 end
