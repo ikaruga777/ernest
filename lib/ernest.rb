@@ -7,8 +7,11 @@ require 'yaml'
 require 'slack_client'
 require 'gist_client'
 require 'emoji_json'
+require 'ernest/version'
 
-class Ernest
+module Ernest
+  class Error < StandardError; end
+
   def run
     settings = YAML.load_file('settings.yaml')
 
